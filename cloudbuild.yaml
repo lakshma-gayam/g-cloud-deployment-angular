@@ -1,26 +1,16 @@
 steps:
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - '-t'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
-      - .
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - push
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    args:
-      - run
-      - deploy
-      - $_SERVICE_NAME
-      - '--image'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
-      - '--region'
-      - $_DEPLOY_REGION
-      - '--platform'
-      - $_PLATFORM
-    entrypoint: gcloud
-timeout: 1200s
-images:
-  - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+
+  # Install node packages
+  - name: "gcr.io/cloud-builders/npm:latest"
+    args: ["install"]
+    dir: "gcloud-angular-ci-cd"
+
+  # Build production package
+  - name: "gcr.io/{projectId}/ng"
+    args: ["build", "--prod"]
+    dir: "gcloud-angular-ci-cd"
+
+  # Deploy to google cloud app engine
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["app", "deploy", "--version=prod"]
+    dir: "gcloud-angular-ci-cd"
