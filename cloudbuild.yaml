@@ -6,7 +6,7 @@ steps:
     dir: "gcloud-angular-ci-cd"
 
   # Build production package
-  - name: "gcr.io/micro-citadel-377705/ng"
+  - name: "gcr.io/cloud-builders/npm"
     args: ["build", "--prod"]
     dir: "gcloud-angular-ci-cd"
 
