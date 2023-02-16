@@ -8,7 +8,7 @@ handlers:
     upload: dist/gcloud-angular-ci-cd/index.html
 
   - url: /
-    static_dir: dist/gcloud-angular-ci-cd/index.html
+    static_dir: dist/gcloud-angular-ci-cd
 
 skip_files:
   - e2e/
